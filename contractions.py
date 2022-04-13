@@ -1,4 +1,10 @@
 def contractions(token):
+  
+  '''
+  Function to expand contractions if any.
+  token: string
+  '''
+  
   f = open('contractions.json','r')
   contractions = json.load(f)
   f.close()
