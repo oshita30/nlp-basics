@@ -3,6 +3,7 @@ def contractions(token):
   '''
   Function to expand contractions if any.
   token: string
+  return type: list
   '''
   
   f = open('contractions.json','r')
