@@ -21,7 +21,7 @@ def lemmatize(token):
   else:
     lem_token = lemmatizer.lemmatize(token,pos='n')
   
-  if lem_token == token:
-    lem_token = ps.stem(token)
+
+  lem_token = ps.stem(lem_token)
   
   return lem_token
