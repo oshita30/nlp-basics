@@ -6,7 +6,7 @@ def lemmatize(token):
   return type: lemmatized string word
   '''
   
-  ps = PorterStemmer()
+
   tag = nltk.pos_tag([token])[0][1]
   lem_token = ''
   if tag[0] == 'V':
@@ -22,6 +22,6 @@ def lemmatize(token):
     lem_token = lemmatizer.lemmatize(token,pos='n')
   
 
-  lem_token = ps.stem(lem_token)
+
   
   return lem_token
