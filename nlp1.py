@@ -2,6 +2,7 @@ import re
 import nltk
 import json
 import os
+from urllib import request
 
 def extract_text(filename):
     '''
@@ -67,10 +68,16 @@ def expand_contractions(token):
   token: string
   return type: string
   '''
-  
-  f = open('contractions.json','r')
-  contractions = json.load(f)
-  f.close()
+  try:
+    f = open('contractions.json','r')
+    contractions = json.load(f)
+    f.close()
+  except:
+    response = request.urlretrieve("https://raw.githubusercontent.com/oshita30/contractions/main/contractions.json", "contractions.json")
+    f = open('contractions.json','r')
+    contractions = json.load(f)
+    f.close()
+    
   if "'" in token:
     try:
       return contractions[token][0]
