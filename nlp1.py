@@ -164,7 +164,10 @@ def preprocess(token):
     
   return lem_token, cont
   
-
+def remove_emailURL(token):
+    x = re.sub("http\S+","",token)
+    x = re.sub("\S+@\S+","",token)
+    return x
 
 def tokenizer_counter(text):
   text = text.strip() + ' '
