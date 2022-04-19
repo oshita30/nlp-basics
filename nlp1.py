@@ -1,5 +1,41 @@
 import re
 import nltk
+import json
+import os
+
+def extract_text(filename):
+    '''
+    Extract the text from the file name (json file) and
+    index the content from paper_id, title, abstract and body_text fields
+    Retunrs - text of title, abstract and bodt_text
+    '''
+
+    file = open(filename,'rb')
+    body_text = ""
+    abstract = ""
+    title = ""
+    paper_id = ""
+
+    paper_content = json.load(file)
+
+    #get the paper_id
+    if 'paper_id' in paper_content:
+        paper_id = paper_content['paper_id']
+        
+    #get the title, if available
+    if 'title' in paper_content['metadata']:
+        title = paper_content['metadata']['title']
+    #get abstract.text, if available
+    if 'abstract' in paper_content:
+        for abs in paper_content['abstract']:
+            abstract = abstract + abs['text']
+    if 'body_text' in paper_content:
+        for bt in paper_content['body_text']:
+            body_text = body_text + bt['text']
+
+
+   
+    return (title + ' ' + abstract + ' ' + body_text + ' ').lower()
 
 def remove_punctuation(token):
   copy = token
@@ -156,7 +192,30 @@ def tokenizer_counter(text):
     else:
       token = token + s
       
+    return list_of_words
+     
+    
+def read_args():
+    parser = argparse.ArgumentParser()    
+    parser.add_argument('-input_json_path', type=str, default='./pdf_json', help='the directory of our json data')
+    parser.add_argument('-list_of_words_output_path', type=str, default='./json_list_of_words', help='the directory of our output data')
+    return parser    
+    
 if __name__ == "__main__":
+  params = read_args().parse_args()
   global word_count
   word_count = {}
+  lop = os.listdir(params.input_json_path)
+  for filename in lop:
+    if filename[-4:].lower() == 'json':
+      text = extract_text(filename)
+      list_of_words = tokenizer_counter(text)
+      filename = filename[:-4] + '.json'
+      f = open(params.list_of_words_output_path+'/'+filename,'wb')
+      f.write(json.dumps(list_of_words))
+      f.close()
   
+  jsonFile = open("word_count.json", "w")
+  jsonFile.write(json.dumps(word_count))
+  jsonFile.close()
+    
